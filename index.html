@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventX Escape Room Booking</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f3460">
+    <meta name="background-color" content="#1a1a2e">
+
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="EventX">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.svg">
+
+    <!-- Windows PWA Meta Tags -->
+    <meta name="msapplication-TileColor" content="#0f3460">
+    <meta name="msapplication-TileImage" href="icons/icon-144x144.svg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon-72x72.svg">
+    <link rel="icon" type="image/png" href="icons/icon-192x192.svg">
+
+    <!-- External Resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #0f3460;
+            --secondary-color: #e94560;
+            --accent-color: #f39c12;
+            --background-dark: #1a1a2e;
+            --background-light: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #bdc3c7;
+            --border-color: #34495e;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--background-dark) 0%, var(--primary-color) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 52, 96, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 0.5rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            background: var(--secondary-color);
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3));
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-primary), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Services Grid */
+        .services {
+            padding: 4rem 0;
+        }
+
+        .services h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
+            border-color: var(--secondary-color);
+        }
+
+        .service-card.selected {
+            border-color: var(--secondary-color);
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .service-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Booking Form */
+        .booking-section {
+            padding: 4rem 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .booking-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day:hover {
+            background: rgba(233, 69, 96, 0.3);
+        }
+
+        .calendar-day.selected {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        /* Install Button */
+        .install-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: rgba(233, 69, 96, 0.1);
+            margin: 2rem 0;
+            border-radius: 20px;
+        }
+
+        .install-btn {
+            background: var(--success-color);
+            display: none;
+        }
+
+        .install-btn.show {
+            display: inline-block;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 4rem 0;
+            text-align: center;
+            background: var(--background-light);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-message.success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-form {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .calendar-grid {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 2rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .services h2 {
+                font-size: 2rem;
+            }
+
+            .service-card {
+                padding: 1.5rem;
+            }
+
+            .booking-form {
+                padding: 1.5rem;
+            }
+        }
+
+        /* PWA Install Prompt */
+        .pwa-install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+
+        .pwa-install-prompt.show {
+            display: flex;
+        }
+
+        .pwa-install-prompt button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        /* Offline Indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--warning-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: none;
+            z-index: 1002;
+        }
+
+        .offline-indicator.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-key"></i>
+                    <span data-translate="brand">EventX</span>
+                </a>
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="sv">Svenska</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi"></i>
+        <span data-translate="offline">Du är offline</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1 data-translate="hero_title">Boka din Escape Room upplevelse</h1>
+                <p data-translate="hero_subtitle">Upptäck våra spännande escape room-aktiviteter från EventX. Perfekt för teambuilding, familjetid eller bara kul med vänner!</p>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services">
+            <div class="container">
+                <h2 data-translate="services_title">Våra tjänster</h2>
+                <div class="services-grid">
+                    <div class="service-card" data-service="questbox">
+                        <h3>QuestBox</h3>
+                        <p data-translate="questbox_description">Mobil escape room där deltagarna samarbetar för att lösa gåtor och ta sig igenom uppdraget.</p>
+                        <div class="service-price" data-translate="questbox_price">Från 345 kr/person</div>
+                    </div>
+                    <div class="service-card" data-service="questgames">
+                        <h3>QuestGames</h3>
+                        <p data-translate="questgames_description">Flexibla lagutmaningar som kombinerar rörelse, logik och skratt.</p>
+                        <div class="service-price" data-translate="questgames_price">Kontakta för pris</div>
+                    </div>
+                    <div class="service-card" data-service="questhouse">
+                        <h3>QuestHouse</h3>
+                        <p data-translate="questhouse_description">Titta in i en dockhusliknande scen där varje rum rymmer en historia.</p>
+                        <div class="service-price" data-translate="questhouse_price">Kontakta för pris</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section class="booking-section">
+            <div class="container">
+                <div class="booking-form">
+                    <h2 data-translate="booking_title">Boka nu</h2>
+
+                    <div class="status-message" id="statusMessage"></div>
+
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label data-translate="selected_service">Vald tjänst:</label>
+                            <select id="serviceSelect" required>
+                                <option value="">Välj tjänst</option>
+                                <option value="questbox">QuestBox - Från 345 kr/person</option>
+                                <option value="questgames">QuestGames</option>
+                                <option value="questhouse">QuestHouse</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="preferred_date">Önskat datum:</label>
+                            <input type="date" id="dateSelect" required min="">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="preferred_time">Önskad tid:</label>
+                            <select id="timeSelect" required>
+                                <option value="">Välj tid</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                                <option value="18:00">18:00</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="group_size">Antal deltagare:</label>
+                            <select id="groupSize" required>
+                                <option value="">Välj antal</option>
+                                <option value="2">2 personer</option>
+                                <option value="3">3 personer</option>
+                                <option value="4">4 personer</option>
+                                <option value="5">5 personer</option>
+                                <option value="6">6 personer</option>
+                                <option value="7">7+ personer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="contact_name">Kontaktperson:</label>
+                            <input type="text" id="contactName" required placeholder="Ditt namn">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="contact_email">E-post:</label>
+                            <input type="email" id="contactEmail" required placeholder="din@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="contact_phone">Telefon:</label>
+                            <input type="tel" id="contactPhone" required placeholder="070-123 45 67">
+                        </div>
+
+                        <div class="form-group">
+                            <label data-translate="additional_info">Ytterligare information:</label>
+                            <textarea id="additionalInfo" rows="3" placeholder="Speciella önskemål eller frågor..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">
+                            <i class="fas fa-calendar-check"></i>
+                            <span data-translate="submit_booking">Skicka bokningsförfrågan</span>
+                        </button>
+                    </form>
+
+                    <div class="loading" id="loadingSpinner">
+                        <div class="spinner"></div>
+                        <p data-translate="processing">Bearbetar din förfrågan...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Install Section -->
+        <section class="install-section">
+            <div class="container">
+                <h2 data-translate="install_title">Installera appen</h2>
+                <p data-translate="install_description">Få snabb åtkomst till bokning genom att installera vår app på din telefon.</p>
+                <button class="btn install-btn" id="installBtn">
+                    <i class="fas fa-download"></i>
+                    <span data-translate="install_app">Installera app</span>
+                </button>
+                <button class="btn btn-outline" id="shareBtn">
+                    <i class="fas fa-share"></i>
+                    <span data-translate="share_app">Dela app</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact">
+            <div class="container">
+                <h2 data-translate="contact_title">Kontakta oss</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3 data-translate="email">E-post</h3>
+                        <p><a href="mailto:info@eventx.nu" style="color: var(--text-secondary);">info@eventx.nu</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <h3 data-translate="phone">Telefon</h3>
+                        <p><a href="tel:0735214077" style="color: var(--text-secondary);">073 521 40 77</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <h3 data-translate="website">Webbplats</h3>
+                        <p><a href="https://eventx.nu" target="_blank" style="color: var(--text-secondary);">eventx.nu</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PWA Install Prompt -->
+    <div class="pwa-install-prompt" id="pwaInstallPrompt">
+        <div>
+            <strong data-translate="install_prompt_title">Installera EventX appen</strong>
+            <p data-translate="install_prompt_text">För bästa upplevelse, installera appen på din hemskärm</p>
+        </div>
+        <div>
+            <button id="pwaInstallButton" data-translate="install">Installera</button>
+            <button id="pwaDismissButton" data-translate="dismiss">Avvisa</button>
+        </div>
+    </div>
+
+    <script>
+        // Translation object
+        const translations = {
+            sv: {
+                brand: "EventX",
+                hero_title: "Boka din Escape Room upplevelse",
+                hero_subtitle: "Upptäck våra spännande escape room-aktiviteter från EventX. Perfekt för teambuilding, familjetid eller bara kul med vänner!",
+                services_title: "Våra tjänster",
+                questbox_description: "Mobil escape room där deltagarna samarbetar för att lösa gåtor och ta sig igenom uppdraget.",
+                questbox_price: "Från 345 kr/person",
+                questgames_description: "Flexibla lagutmaningar som kombinerar rörelse, logik och skratt.",
+                questgames_price: "Kontakta för pris",
+                questhouse_description: "Titta in i en dockhusliknande scen där varje rum rymmer en historia.",
+                questhouse_price: "Kontakta för pris",
+                booking_title: "Boka nu",
+                selected_service: "Vald tjänst:",
+                preferred_date: "Önskat datum:",
+                preferred_time: "Önskad tid:",
+                group_size: "Antal deltagare:",
+                contact_name: "Kontaktperson:",
+                contact_email: "E-post:",
+                contact_phone: "Telefon:",
+                additional_info: "Ytterligare information:",
+                submit_booking: "Skicka bokningsförfrågan",
+                processing: "Bearbetar din förfrågan...",
+                install_title: "Installera appen",
+                install_description: "Få snabb åtkomst till bokning genom att installera vår app på din telefon.",
+                install_app: "Installera app",
+                share_app: "Dela app",
+                contact_title: "Kontakta oss",
+                email: "E-post",
+                phone: "Telefon",
+                website: "Webbplats",
+                offline: "Du är offline",
+                install_prompt_title: "Installera EventX appen",
+                install_prompt_text: "För bästa upplevelse, installera appen på din hemskärm",
+                install: "Installera",
+                dismiss: "Avvisa",
+                booking_success: "Tack! Din bokningsförfrågan har skickats. Vi kontaktar dig inom kort.",
+                booking_error: "Ett fel uppstod. Försök igen eller kontakta oss direkt."
+            },
+            en: {
+                brand: "EventX",
+                hero_title: "Book your Escape Room experience",
+                hero_subtitle: "Discover our exciting escape room activities from EventX. Perfect for team building, family time, or just fun with friends!",
+                services_title: "Our services",
+                questbox_description: "Mobile escape room where participants collaborate to solve puzzles and complete the mission.",
+                questbox_price: "From 345 SEK/person",
+                questgames_description: "Flexible team challenges combining movement, logic and laughter.",
+                questgames_price: "Contact for price",
+                questhouse_description: "Look into a dollhouse-like scene where each room holds a story.",
+                questhouse_price: "Contact for price",
+                booking_title: "Book now",
+                selected_service: "Selected service:",
+                preferred_date: "Preferred date:",
+                preferred_time: "Preferred time:",
+                group_size: "Number of participants:",
+                contact_name: "Contact person:",
+                contact_email: "Email:",
+                contact_phone: "Phone:",
+                additional_info: "Additional information:",
+                submit_booking: "Send booking request",
+                processing: "Processing your request...",
+                install_title: "Install the app",
+                install_description: "Get quick access to booking by installing our app on your phone.",
+                install_app: "Install app",
+                share_app: "Share app",
+                contact_title: "Contact us",
+                email: "Email",
+                phone: "Phone",
+                website: "Website",
+                offline: "You are offline",
+                install_prompt_title: "Install EventX app",
+                install_prompt_text: "For the best experience, install the app on your home screen",
+                install: "Install",
+                dismiss: "Dismiss",
+                booking_success: "Thank you! Your booking request has been sent. We will contact you shortly.",
+                booking_error: "An error occurred. Please try again or contact us directly."
+            }
+        };
+
+        // Current language
+        let currentLang = 'sv';
+
+        // PWA Variables
+        let deferredPrompt;
+        let installBtn = document.getElementById('installBtn');
+        let shareBtn = document.getElementById('shareBtn');
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA Install Event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+
+            // Show install prompt after delay
+            setTimeout(() => {
+                showInstallPrompt();
+            }, 5000);
+        });
+
+        // Install button click
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                hideInstallPrompt();
+            }
+        });
+
+        // Share functionality
+        shareBtn.addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'EventX Escape Room Booking',
+                        text: 'Book your escape room experience with EventX!',
+                        url: window.location.href,
+                    });
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(window.location.href);
+                    showStatus('Link copied to clipboard!', 'success');
+                }
+            }
+        });
+
+        // Language switching
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.dataset.lang;
+                switchLanguage(lang);
+
+                // Update active button
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.dataset.translate;
+                if (translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+
+            // Save language preference
+            localStorage.setItem('eventx-language', lang);
+        }
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('eventx-language');
+        if (savedLang && translations[savedLang]) {
+            switchLanguage(savedLang);
+            document.querySelector(`[data-lang="${savedLang}"]`).classList.add('active');
+            document.querySelector(`[data-lang="${savedLang === 'sv' ? 'en' : 'sv'}"]`).classList.remove('active');
+        }
+
+        // Service selection
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove previous selection
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+
+                // Add selection to clicked card
+                card.classList.add('selected');
+
+                // Update select dropdown
+                const service = card.dataset.service;
+                document.getElementById('serviceSelect').value = service;
+
+                // Scroll to booking form
+                document.querySelector('.booking-section').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Form submission
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const bookingData = {
+                service: document.getElementById('serviceSelect').value,
+                date: document.getElementById('dateSelect').value,
+                time: document.getElementById('timeSelect').value,
+                groupSize: document.getElementById('groupSize').value,
+                contactName: document.getElementById('contactName').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                additionalInfo: document.getElementById('additionalInfo').value,
+                timestamp: new Date().toISOString(),
+                language: currentLang
+            };
+
+            // Show loading
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.querySelector('.btn[type="submit"]').style.display = 'none';
+
+            try {
+                // Simulate API call (replace with real endpoint)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // If offline, save to IndexedDB for later sync
+                if (!navigator.onLine) {
+                    await saveBookingOffline(bookingData);
+                    showStatus(translations[currentLang].booking_success, 'success');
+                } else {
+                    // Send to server (implement your API endpoint)
+                    // const response = await fetch('/api/bookings', {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify(bookingData)
+                    // });
+
+                    showStatus(translations[currentLang].booking_success, 'success');
+                }
+
+                // Reset form
+                document.getElementById('bookingForm').reset();
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+
+            } catch (error) {
+                console.error('Booking error:', error);
+                showStatus(translations[currentLang].booking_error, 'error');
+            } finally {
+                // Hide loading
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.querySelector('.btn[type="submit"]').style.display = 'inline-block';
+            }
+        });
+
+        // Set minimum date to today
+        document.getElementById('dateSelect').min = new Date().toISOString().split('T')[0];
+
+        // Online/Offline status
+        window.addEventListener('online', () => {
+            document.getElementById('offlineIndicator').classList.remove('show');
+            syncPendingBookings();
+        });
+
+        window.addEventListener('offline', () => {
+            document.getElementById('offlineIndicator').classList.add('show');
+        });
+
+        // PWA Install Prompt Functions
+        function showInstallPrompt() {
+            document.getElementById('pwaInstallPrompt').classList.add('show');
+        }
+
+        function hideInstallPrompt() {
+            document.getElementById('pwaInstallPrompt').classList.remove('show');
+        }
+
+        document.getElementById('pwaInstallButton').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+            }
+            hideInstallPrompt();
+        });
+
+        document.getElementById('pwaDismissButton').addEventListener('click', () => {
+            hideInstallPrompt();
+            localStorage.setItem('pwa-install-dismissed', 'true');
+        });
+
+        // Don't show install prompt if previously dismissed
+        if (localStorage.getItem('pwa-install-dismissed')) {
+            // Don't auto-show prompt
+        }
+
+        // Utility Functions
+        function showStatus(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message ${type} show`;
+
+            setTimeout(() => {
+                statusElement.classList.remove('show');
+            }, 5000);
+        }
+
+        async function saveBookingOffline(bookingData) {
+            // Save to localStorage as fallback
+            const pendingBookings = JSON.parse(localStorage.getItem('pendingBookings') || '[]');
+            pendingBookings.push({
+                id: Date.now(),
+                ...bookingData
+            });
+            localStorage.setItem('pendingBookings', JSON.stringify(pendingBookings));
+
+            // Request background sync
+            if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+                const registration = await navigator.serviceWorker.ready;
+                await registration.sync.register('booking-sync');
+            }
+        }
+
+        async function syncPendingBookings() {
+            const pendingBookings = JSON.parse(localStorage.getItem('pendingBookings') || '[]');
+
+            for (const booking of pendingBookings) {
+                try {
+                    // Send to server (implement your API endpoint)
+                    // await fetch('/api/bookings', {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify(booking)
+                    // });
+
+                    console.log('Booking synced:', booking.id);
+                } catch (error) {
+                    console.error('Failed to sync booking:', booking.id, error);
+                    break; // Stop syncing if there's an error
+                }
+            }
+
+            // Clear synced bookings
+            if (pendingBookings.length > 0) {
+                localStorage.removeItem('pendingBookings');
+                showStatus('Offline bookings have been synced!', 'success');
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if offline
+            if (!navigator.onLine) {
+                document.getElementById('offlineIndicator').classList.add('show');
+            }
+
+            // Sync any pending bookings
+            syncPendingBookings();
+        });
+    </script>
+</body>
+</html>
