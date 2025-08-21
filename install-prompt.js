@@ -75,7 +75,10 @@ class PWAInstaller {
             'HTTPS': location.protocol === 'https:' || location.hostname === 'localhost',
             'Service Worker': 'serviceWorker' in navigator,
             'Manifest': document.querySelector('link[rel="manifest"]') !== null,
-            'Standalone Support': window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
+            'Standalone Support': window.matchMedia('(display-mode: standalone)').matches || 
+                                 window.navigator.standalone ||
+                                 document.referrer.includes('android-app://') ||
+                                 window.matchMedia('(display-mode: minimal-ui)').matches
         };
 
         this.log('PWA Support Check:', checks);
@@ -84,6 +87,22 @@ class PWAInstaller {
         if (checks['Standalone Support']) {
             this.isInstalled = true;
             this.log('App is already installed');
+            this.hideInstallButton();
+            this.hideInstallPromptSection();
+        }
+
+        // Дополнительная проверка через navigator.getInstalledRelatedApps (если поддерживается)
+        if ('getInstalledRelatedApps' in navigator) {
+            navigator.getInstalledRelatedApps().then(apps => {
+                if (apps.length > 0) {
+                    this.isInstalled = true;
+                    this.log('App detected via getInstalledRelatedApps');
+                    this.hideInstallButton();
+                    this.hideInstallPromptSection();
+                }
+            }).catch(err => {
+                this.log('getInstalledRelatedApps failed:', err);
+            });
         }
 
         return checks;
@@ -364,6 +383,10 @@ class PWAInstaller {
 
             debugPanel.innerHTML = updatedHTML;
         }, 2000);
+    }
+
+    hideInstallPromptSection() {
+        // Add your logic to hide the install prompt section here
     }
 }
 
