@@ -1,177 +1,124 @@
-const CACHE_NAME = 'eventx-escape-room-v1.0.0';
+
+const CACHE_NAME = 'eventx-escape-room-v1.2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
+  '/icons/icon-192x192.svg',
+  '/icons/icon-512x512.svg',
+  // Кэшируем основные ресурсы для offline работы
 ];
 
-// Install Service Worker
-self.addEventListener('install', (event) => {
-  console.log('EventX PWA Service Worker installing...');
+// Установка Service Worker
+self.addEventListener('install', function(event) {
+  console.log('EventX PWA: Service Worker installing');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
+      .then(function(cache) {
+        console.log('EventX PWA: Opened cache');
         return cache.addAll(urlsToCache);
       })
-      .catch((error) => {
-        console.error('Cache addAll failed:', error);
+      .then(function() {
+        // Принудительно активируем новый SW
+        return self.skipWaiting();
       })
   );
 });
 
-// Fetch event - serve from cache when offline
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        if (response) {
-          console.log('Serving from cache:', event.request.url);
-          return response;
-        }
-
-        console.log('Fetching from network:', event.request.url);
-        return fetch(event.request).then((response) => {
-          // Don't cache non-successful responses
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone the response
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        }).catch((error) => {
-          console.error('Fetch failed:', error);
-
-          // Return offline page for navigation requests
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
-
-          throw error;
-        });
-      })
-  );
-});
-
-// Activate Service Worker
-self.addEventListener('activate', (event) => {
-  console.log('EventX PWA Service Worker activating...');
+// Активация Service Worker
+self.addEventListener('activate', function(event) {
+  console.log('EventX PWA: Service Worker activating');
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(function(cacheNames) {
       return Promise.all(
-        cacheNames.map((cacheName) => {
+        cacheNames.map(function(cacheName) {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
+            console.log('EventX PWA: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(function() {
+      // Принудительно берем контроль над всеми клиентами
+      return self.clients.claim();
     })
   );
 });
 
-// Handle background sync for booking requests
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'booking-sync') {
-    console.log('Background sync: booking-sync');
-    event.waitUntil(syncBookings());
-  }
-});
-
-// Background sync function for bookings
-async function syncBookings() {
-  try {
-    // Get pending bookings from IndexedDB
-    const pendingBookings = await getPendingBookings();
-
-    for (const booking of pendingBookings) {
-      try {
-        // Send booking to server
-        const response = await fetch('/api/bookings', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(booking)
-        });
-
-        if (response.ok) {
-          await removePendingBooking(booking.id);
-          console.log('Booking synced:', booking.id);
+// Перехват запросов (стратегия Cache First для статических ресурсов)
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // Возвращаем кэшированную версию если есть
+        if (response) {
+          return response;
         }
-      } catch (error) {
-        console.error('Failed to sync booking:', booking.id, error);
-      }
-    }
-  } catch (error) {
-    console.error('Background sync failed:', error);
-  }
-}
 
-// Placeholder functions for IndexedDB operations
-async function getPendingBookings() {
-  // Implementation would use IndexedDB to get pending bookings
-  return [];
-}
+        // Клонируем запрос для безопасности
+        const fetchRequest = event.request.clone();
 
-async function removePendingBooking(bookingId) {
-  // Implementation would remove booking from IndexedDB
-  console.log('Removing pending booking:', bookingId);
-}
+        return fetch(fetchRequest).then(function(response) {
+          // Проверяем валидность ответа
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
 
-// Push notification handling
-self.addEventListener('push', (event) => {
-  console.log('Push message received');
+          // Клонируем ответ для кэша
+          const responseToCache = response.clone();
 
-  const options = {
-    body: event.data ? event.data.text() : 'EventX booking notification',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '1'
-    },
-    actions: [
-      {
-        action: 'view',
-        title: 'View booking',
-        icon: '/icons/icon-72x72.png'
-      },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: '/icons/icon-72x72.png'
-      }
-    ]
-  };
+          caches.open(CACHE_NAME)
+            .then(function(cache) {
+              cache.put(event.request, responseToCache);
+            });
 
-  event.waitUntil(
-    self.registration.showNotification('EventX Escape Room', options)
+          return response;
+        }).catch(function() {
+          // Возвращаем offline страницу если доступно
+          if (event.request.destination === 'document') {
+            return caches.match('/');
+          }
+        });
+      })
   );
 });
 
-// Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
-  console.log('Notification click received.');
+// Обработка сообщений от основного приложения
+self.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
-  event.notification.close();
+// Уведомления (если понадобятся в будущем)
+self.addEventListener('push', function(event) {
+  if (event.data) {
+    const data = event.data.json();
+    const options = {
+      body: data.body,
+      icon: '/icons/icon-192x192.svg',
+      badge: '/icons/icon-72x72.svg',
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: '1',
+        url: data.url || '/'
+      },
+      actions: [
+        {
+          action: 'explore', 
+          title: 'Öppna EventX',
+          icon: '/icons/icon-96x96.svg'
+        },
+        {
+          action: 'close', 
+          title: 'Stäng'
+        }
+      ]
+    };
 
-  if (event.action === 'view') {
     event.waitUntil(
-      clients.openWindow('/')
+      self.registration.showNotification(data.title, options)
     );
   }
 });

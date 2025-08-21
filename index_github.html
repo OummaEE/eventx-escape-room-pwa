@@ -11,13 +11,13 @@
     <meta name="author" content="EventX">
 
     <!-- PWA манифест -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
 
     <!-- Иконки для разных устройств -->
-    <link rel="icon" type="image/svg+xml" href="/icons/icon-96x96.svg">
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.svg">
+    <link rel="icon" type="image/svg+xml" href="icons/icon-96x96.svg">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.svg">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.svg">
 
     <!-- iOS Safari specific meta теги -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -474,7 +474,7 @@
     </div>
 
     <!-- PWA Installation Script -->
-    <script src="/install-prompt.js"></script>
+    <script src="install-prompt.js"></script>
 
     <script>
         let currentLanguage = 'sv';
@@ -611,7 +611,7 @@
         // Add to homescreen hint for unsupported browsers
         if ('serviceWorker' in navigator) {
             // Register service worker
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register('service-worker.js')
                 .then(registration => {
                     console.log('EventX PWA: Service Worker registered successfully');
                 })

@@ -1,7 +1,7 @@
 # EventX Escape Room Booking PWA
 
 ## 🇬🇧 English | 🇸🇪 Svenska
- 
+
 ---
 
 ## 🇬🇧 English
