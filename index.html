@@ -1,40 +1,30 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" class="swedish">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>EventX Escape Room Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- PWA Meta теги для установки приложения -->
-    <meta name="description" content="Boka escape room upplevelser från EventX - QuestBox, QuestGames, QuestHouse. Mobil bokning direkt på din telefon.">
-    <meta name="keywords" content="escape room, bokning, EventX, QuestBox, team building, Sweden">
-    <meta name="author" content="EventX">
-
-    <!-- PWA манифест -->
-    <link rel="manifest" href="/manifest.json">
-
-    <!-- Иконки для разных устройств -->
-    <link rel="icon" type="image/svg+xml" href="/icons/icon-96x96.svg">
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.svg">
-
-    <!-- iOS Safari specific meta теги -->
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="EventX Escape Room">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EventX Booking">
-
-    <!-- Microsoft Tiles -->
-    <meta name="msapplication-TileColor" content="#1a1a1a">
-    <meta name="msapplication-TileImage" content="/icons/icon-144x144.svg">
-
-    <!-- Theme colors -->
-    <meta name="theme-color" content="#1a1a1a">
-    <meta name="msapplication-navbutton-color" content="#1a1a1a">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- Предотвращение zoom на iOS -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="EventX">
+    <meta name="description" content="Book your EventX escape room experience - QuestBox, QuestGames, QuestHouse">
     <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    <meta name="msapplication-TileColor" content="#667eea">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="theme-color" content="#667eea">
+
+    <!-- PWA Links -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.svg">
+    <link rel="icon" type="image/svg+xml" href="./icons/icon-192x192.svg">
+    <link rel="mask-icon" href="./icons/icon-192x192.svg" color="#667eea">
+    <link rel="shortcut icon" href="./icons/icon-192x192.svg">
+
+    <title>EventX Escape Room Booking</title>
 
     <style>
         * {
@@ -44,515 +34,541 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
 
-        .app-container {
-            max-width: 480px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            padding: 20px;
         }
 
         .header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-            color: white;
-            padding: 20px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 40px;
+            color: white;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="30" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="80" r="2.5" fill="rgba(255,255,255,0.1)"/></svg>');
-            pointer-events: none;
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        .logo {
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 5px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .tagline {
+        .header p {
+            font-size: 1.2em;
             opacity: 0.9;
-            font-size: 0.9em;
-            position: relative;
-            z-index: 1;
         }
 
         .language-toggle {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 20px;
+            right: 20px;
             background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.2s;
-            z-index: 2;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
         .language-toggle:hover {
             background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
         }
 
-        .main-content {
-            padding: 20px;
-            padding-bottom: 100px;
-        }
-
-        .service-grid {
+        .services-grid {
             display: grid;
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
         }
 
         .service-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
 
         .service-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         .service-card.selected {
-            border-color: #667eea;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-        }
-
-        .service-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+            border: 3px solid #667eea;
+            transform: scale(1.02);
         }
 
         .service-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .service-title {
             font-size: 1.5em;
-            margin-right: 10px;
-        }
-
-        .service-name {
-            font-weight: 600;
-            font-size: 1.1em;
-        }
-
-        .service-price {
-            color: #667eea;
-            font-weight: 600;
-            margin-left: auto;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
         }
 
         .service-description {
             color: #666;
-            font-size: 0.9em;
-            line-height: 1.4;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .service-price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
         }
 
         .booking-form {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        .form-label {
+        .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-weight: bold;
             color: #333;
         }
 
-        .form-input {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
             border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.2s;
-            background: white;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
         }
 
-        .form-input:focus {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 20px;
         }
 
-        .submit-btn {
-            width: 100%;
+        .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
         }
 
-        .submit-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .submit-btn:active {
+        .btn:active {
             transform: translateY(0);
         }
 
         .contact-info {
-            background: #1a1a1a;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             text-align: center;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 20px;
+            color: #333;
         }
 
         .contact-item {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
         }
 
-        .contact-icon {
-            margin-right: 8px;
+        .contact-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
         }
 
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 480px;
-            width: 100%;
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .pwa-install-prompt {
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0,0,0,0.1);
-            padding: 15px 20px;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
             text-align: center;
-            font-size: 0.8em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .pwa-install-prompt h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .pwa-install-prompt p {
+            margin-bottom: 15px;
             color: #666;
         }
 
-        /* PWA specific styles */
-        @media (display-mode: standalone) {
-            .header {
-                padding-top: 40px; /* Account for status bar */
-            }
+        .install-app-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .app-container {
-                margin: 0;
-                box-shadow: none;
+        .install-app-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .share-btn {
+            background: rgba(102,126,234,0.1);
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
             }
 
-            .main-content {
-                padding: 15px;
-                padding-bottom: 80px;
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .language-toggle {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .booking-form {
+                padding: 25px;
             }
         }
 
-        /* Loading animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
+        /* PWA installed styles */
+        @media (display-mode: standalone) {
+            .pwa-install-prompt {
+                display: none;
+            }
+
+            body {
+                padding-top: 20px;
+            }
         }
 
-        .loading.show {
-            display: block;
+        /* Debug panel styles */
+        #pwa-debug-panel {
+            font-size: 11px !important;
+            line-height: 1.3 !important;
         }
 
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Success message */
-        .success-message {
-            background: #4CAF50;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="header">
+    <div class="container">
+        <div class="header fade-in">
             <button class="language-toggle" onclick="toggleLanguage()">
-                <span id="lang-btn">🇬🇧 EN</span>
+                <span class="swedish-text">🇺🇸 English</span>
+                <span class="english-text" style="display: none;">🇸🇪 Svenska</span>
             </button>
-            <h1 class="logo">EventX</h1>
-            <p class="tagline" id="tagline">Escape Room Booking</p>
-        </header>
 
-        <main class="main-content">
-            <div class="service-grid">
-                <div class="service-card" onclick="selectService('questbox')" id="questbox-card">
-                    <div class="service-header">
-                        <span class="service-icon">🎯</span>
-                        <span class="service-name">QuestBox</span>
-                        <span class="service-price" id="questbox-price">från 345 kr/person</span>
-                    </div>
-                    <p class="service-description" id="questbox-desc">
-                        Mobilt escape room där deltagarna samarbetar för att lösa gåtor och hitta ledtrådar. Perfekt för teambuilding på arbetsplatsen.
-                    </p>
+            <h1>
+                <span class="swedish-text">EventX Escape Room</span>
+                <span class="english-text" style="display: none;">EventX Escape Room</span>
+            </h1>
+            <p>
+                <span class="swedish-text">Boka din escape room-upplevelse nu!</span>
+                <span class="english-text" style="display: none;">Book your escape room experience now!</span>
+            </p>
+        </div>
+
+        <!-- PWA Install Prompt -->
+        <div class="pwa-install-prompt fade-in" id="pwa-install-prompt-section">
+            <h3>
+                <span class="swedish-text">📱 Installera appen</span>
+                <span class="english-text" style="display: none;">📱 Install the app</span>
+            </h3>
+            <p>
+                <span class="swedish-text">Få snabb åtkomst till bokning genom att installera vår app på din telefon.</span>
+                <span class="english-text" style="display: none;">Get quick access to booking by installing our app on your phone.</span>
+            </p>
+            <button class="install-app-btn" onclick="handleInstallClick()">
+                <span class="swedish-text">📱 Installera App</span>
+                <span class="english-text" style="display: none;">📱 Install App</span>
+            </button>
+            <button class="share-btn" onclick="handleShareClick()">
+                <span class="swedish-text">📤 Dela app</span>
+                <span class="english-text" style="display: none;">📤 Share app</span>
+            </button>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid fade-in">
+            <div class="service-card" onclick="selectService('questbox')">
+                <div class="service-icon">🗝️</div>
+                <div class="service-title">
+                    <span class="swedish-text">QuestBox</span>
+                    <span class="english-text" style="display: none;">QuestBox</span>
                 </div>
-
-                <div class="service-card" onclick="selectService('questgames')" id="questgames-card">
-                    <div class="service-header">
-                        <span class="service-icon">🎮</span>
-                        <span class="service-name">QuestGames</span>
-                        <span class="service-price" id="questgames-price">på förfrågan</span>
-                    </div>
-                    <p class="service-description" id="questgames-desc">
-                        Flexibla lagutmaningar som kombinerar rörelse, logik och skratt. Väcker energi och stärker samarbetet i gruppen.
-                    </p>
+                <div class="service-description">
+                    <span class="swedish-text">Mobilt escape room där teamet samarbetar för att lösa gåtor och ta sig igenom uppdraget.</span>
+                    <span class="english-text" style="display: none;">Mobile escape room where teams collaborate to solve puzzles and complete the mission.</span>
                 </div>
+                <div class="service-price">
+                    <span class="swedish-text">Från 345 kr/person</span>
+                    <span class="english-text" style="display: none;">From 345 SEK/person</span>
+                </div>
+            </div>
 
-                <div class="service-card" onclick="selectService('questhouse')" id="questhouse-card">
-                    <div class="service-header">
-                        <span class="service-icon">🏠</span>
-                        <span class="service-name">QuestHouse</span>
-                        <span class="service-price" id="questhouse-price">på förfrågan</span>
-                    </div>
-                    <p class="service-description" id="questhouse-desc">
-                        Dockhusliknande scen där varje rum rymmer en historia. Lös visuella pussel genom observation och tolkning.
-                    </p>
+            <div class="service-card" onclick="selectService('questgames')">
+                <div class="service-icon">🎯</div>
+                <div class="service-title">
+                    <span class="swedish-text">QuestGames</span>
+                    <span class="english-text" style="display: none;">QuestGames</span>
+                </div>
+                <div class="service-description">
+                    <span class="swedish-text">Flexibla lagutmaningar som kombinerar rörelse, logik och skratt för teambuilding.</span>
+                    <span class="english-text" style="display: none;">Flexible team challenges combining movement, logic and laughter for team building.</span>
+                </div>
+                <div class="service-price">
+                    <span class="swedish-text">Kontakta för pris</span>
+                    <span class="english-text" style="display: none;">Contact for price</span>
                 </div>
             </div>
 
-            <form class="booking-form" id="booking-form">
-                <h3 id="form-title">Boka din upplevelse</h3>
-
-                <div class="form-group">
-                    <label class="form-label" id="name-label" for="name">Namn</label>
-                    <input type="text" id="name" class="form-input" required>
+            <div class="service-card" onclick="selectService('questhouse')">
+                <div class="service-icon">🏠</div>
+                <div class="service-title">
+                    <span class="swedish-text">QuestHouse</span>
+                    <span class="english-text" style="display: none;">QuestHouse</span>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label" id="email-label" for="email">E-post</label>
-                    <input type="email" id="email" class="form-input" required>
+                <div class="service-description">
+                    <span class="swedish-text">Dockhusliknande scener där varje rum berättar en historia genom visuella pussel.</span>
+                    <span class="english-text" style="display: none;">Dollhouse-like scenes where each room tells a story through visual puzzles.</span>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label" id="phone-label" for="phone">Telefon</label>
-                    <input type="tel" id="phone" class="form-input" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" id="date-label" for="date">Datum</label>
-                        <input type="date" id="date" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" id="time-label" for="time">Tid</label>
-                        <input type="time" id="time" class="form-input" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" id="participants-label" for="participants">Antal deltagare</label>
-                    <input type="number" id="participants" class="form-input" min="2" max="20" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" id="message-label" for="message">Meddelande (valfritt)</label>
-                    <textarea id="message" class="form-input" rows="3" placeholder="Särskilda önskemål eller information..."></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submit-btn">
-                    <span id="submit-text">Skicka bokningsförfrågan</span>
-                </button>
-
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p id="loading-text">Skickar din bokningsförfrågan...</p>
-                </div>
-
-                <div class="success-message" id="success-message">
-                    <h4 id="success-title">Tack för din bokning!</h4>
-                    <p id="success-text">Vi kontaktar dig inom 24 timmar för att bekräfta din bokning.</p>
-                </div>
-            </form>
-
-            <div class="contact-info">
-                <h3 id="contact-title">Kontakt</h3>
-                <div class="contact-item">
-                    <span class="contact-icon">📧</span>
-                    <a href="mailto:info@eventx.nu" style="color: white; text-decoration: none;">info@eventx.nu</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">📱</span>
-                    <a href="tel:+46735214077" style="color: white; text-decoration: none;">073 521 40 77</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">🌐</span>
-                    <a href="https://eventx.nu" style="color: white; text-decoration: none;">eventx.nu</a>
+                <div class="service-price">
+                    <span class="swedish-text">Kontakta för pris</span>
+                    <span class="english-text" style="display: none;">Contact for price</span>
                 </div>
             </div>
-        </main>
+        </div>
 
-        <footer class="footer">
-            <p>&copy; 2025 EventX. <span id="footer-text">Vi skapar magi!</span></p>
-        </footer>
+        <!-- Booking Form -->
+        <form class="booking-form fade-in" id="booking-form" onsubmit="handleBookingSubmit(event)">
+            <h2>
+                <span class="swedish-text">Boka din upplevelse</span>
+                <span class="english-text" style="display: none;">Book your experience</span>
+            </h2>
+
+            <div class="form-group">
+                <label>
+                    <span class="swedish-text">Vald tjänst:</span>
+                    <span class="english-text" style="display: none;">Selected service:</span>
+                </label>
+                <select id="service-select" required>
+                    <option value="">
+                        <span class="swedish-text">Välj en tjänst</span>
+                        <span class="english-text" style="display: none;">Choose a service</span>
+                    </option>
+                    <option value="questbox">QuestBox - Mobile Escape Room</option>
+                    <option value="questgames">QuestGames - Team Challenges</option>
+                    <option value="questhouse">QuestHouse - Visual Puzzles</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">Förnamn:</span>
+                        <span class="english-text" style="display: none;">First name:</span>
+                    </label>
+                    <input type="text" id="first-name" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">Efternamn:</span>
+                        <span class="english-text" style="display: none;">Last name:</span>
+                    </label>
+                    <input type="text" id="last-name" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">E-post:</span>
+                        <span class="english-text" style="display: none;">Email:</span>
+                    </label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">Telefon:</span>
+                        <span class="english-text" style="display: none;">Phone:</span>
+                    </label>
+                    <input type="tel" id="phone" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">Önskat datum:</span>
+                        <span class="english-text" style="display: none;">Preferred date:</span>
+                    </label>
+                    <input type="date" id="preferred-date" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <span class="swedish-text">Antal deltagare:</span>
+                        <span class="english-text" style="display: none;">Number of participants:</span>
+                    </label>
+                    <select id="participants" required>
+                        <option value="">
+                            <span class="swedish-text">Välj antal</span>
+                            <span class="english-text" style="display: none;">Select number</span>
+                        </option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7+">7+</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span class="swedish-text">Meddelande (valfritt):</span>
+                    <span class="english-text" style="display: none;">Message (optional):</span>
+                </label>
+                <textarea id="message" rows="4" placeholder="Berätta om dina önskemål eller specialbehov..."></textarea>
+            </div>
+
+            <button type="submit" class="btn">
+                <span class="swedish-text">📧 Skicka bokningsförfrågan</span>
+                <span class="english-text" style="display: none;">📧 Send booking request</span>
+            </button>
+        </form>
+
+        <!-- Contact Info -->
+        <div class="contact-info fade-in">
+            <h3>
+                <span class="swedish-text">Kontakta oss</span>
+                <span class="english-text" style="display: none;">Contact us</span>
+            </h3>
+            <div class="contact-item">
+                📞 <a href="tel:+46735214077">073 521 40 77</a>
+            </div>
+            <div class="contact-item">
+                📧 <a href="mailto:info@eventx.nu">info@eventx.nu</a>
+            </div>
+            <div class="contact-item">
+                🌐 <a href="https://eventx.nu" target="_blank">eventx.nu</a>
+            </div>
+        </div>
     </div>
 
-    <!-- PWA Installation Script -->
-    <script src="/install-prompt.js"></script>
+    <!-- Scripts -->
+    <script src="./install-prompt.js"></script>
 
     <script>
-        let currentLanguage = 'sv';
-        let selectedService = 'questbox';
+        let selectedService = '';
+        let currentLanguage = 'swedish';
 
-        // Translations
-        const translations = {
-            sv: {
-                tagline: 'Escape Room Booking',
-                'questbox-price': 'från 345 kr/person',
-                'questgames-price': 'på förfrågan',
-                'questhouse-price': 'på förfrågan',
-                'questbox-desc': 'Mobilt escape room där deltagarna samarbetar för att lösa gåtor och hitta ledtrådar. Perfekt för teambuilding på arbetsplatsen.',
-                'questgames-desc': 'Flexibla lagutmaningar som kombinerar rörelse, logik och skratt. Väcker energi och stärker samarbetet i gruppen.',
-                'questhouse-desc': 'Dockhusliknande scen där varje rum rymmer en historia. Lös visuella pussel genom observation och tolkning.',
-                'form-title': 'Boka din upplevelse',
-                'name-label': 'Namn',
-                'email-label': 'E-post',
-                'phone-label': 'Telefon',
-                'date-label': 'Datum',
-                'time-label': 'Tid',
-                'participants-label': 'Antal deltagare',
-                'message-label': 'Meddelande (valfritt)',
-                'submit-text': 'Skicka bokningsförfrågan',
-                'loading-text': 'Skickar din bokningsförfrågan...',
-                'success-title': 'Tack för din bokning!',
-                'success-text': 'Vi kontaktar dig inom 24 timmar för att bekräfta din bokning.',
-                'contact-title': 'Kontakt',
-                'footer-text': 'Vi skapar magi!',
-                'lang-btn': '🇬🇧 EN'
-            },
-            en: {
-                tagline: 'Escape Room Booking',
-                'questbox-price': 'from 345 SEK/person',
-                'questgames-price': 'on request',
-                'questhouse-price': 'on request',
-                'questbox-desc': 'Mobile escape room where participants collaborate to solve puzzles and find clues. Perfect for workplace team building.',
-                'questgames-desc': 'Flexible team challenges combining movement, logic and laughter. Energizes and strengthens group collaboration.',
-                'questhouse-desc': 'Dollhouse-like scene where each room holds a story. Solve visual puzzles through observation and interpretation.',
-                'form-title': 'Book your experience',
-                'name-label': 'Name',
-                'email-label': 'Email',
-                'phone-label': 'Phone',
-                'date-label': 'Date',
-                'time-label': 'Time',
-                'participants-label': 'Number of participants',
-                'message-label': 'Message (optional)',
-                'submit-text': 'Send booking request',
-                'loading-text': 'Sending your booking request...',
-                'success-title': 'Thank you for your booking!',
-                'success-text': 'We will contact you within 24 hours to confirm your booking.',
-                'contact-title': 'Contact',
-                'footer-text': 'We create magic!',
-                'lang-btn': '🇸🇪 SV'
-            }
-        };
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[EventX] App initialized');
 
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'sv' ? 'en' : 'sv';
-            updateTexts();
-            document.documentElement.lang = currentLanguage;
-        }
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('preferred-date').min = today;
 
-        function updateTexts() {
-            const texts = translations[currentLanguage];
-            for (const [key, value] of Object.entries(texts)) {
-                const element = document.getElementById(key);
-                if (element) {
-                    if (element.tagName === 'INPUT' && element.type === 'submit') {
-                        element.value = value;
-                    } else if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                        element.placeholder = value;
-                    } else {
-                        element.textContent = value;
-                    }
-                }
-            }
-        }
+            // Add fade-in animation
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.style.opacity = '1';
+                });
+            }, 100);
+        });
 
         function selectService(service) {
             // Remove previous selection
@@ -561,69 +577,142 @@
             });
 
             // Add selection to clicked card
-            document.getElementById(service + '-card').classList.add('selected');
+            event.currentTarget.classList.add('selected');
             selectedService = service;
+
+            // Update form
+            document.getElementById('service-select').value = service;
+
+            console.log('[EventX] Service selected:', service);
         }
 
-        // Set minimum date to today
-        document.getElementById('date').min = new Date().toISOString().split('T')[0];
+        function toggleLanguage() {
+            const swedishElements = document.querySelectorAll('.swedish-text');
+            const englishElements = document.querySelectorAll('.english-text');
 
-        // Form submission
-        document.getElementById('booking-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+            if (currentLanguage === 'swedish') {
+                swedishElements.forEach(el => el.style.display = 'none');
+                englishElements.forEach(el => el.style.display = '');
+                document.documentElement.lang = 'en';
+                document.body.classList.remove('swedish');
+                document.body.classList.add('english');
+                currentLanguage = 'english';
+            } else {
+                swedishElements.forEach(el => el.style.display = '');
+                englishElements.forEach(el => el.style.display = 'none');
+                document.documentElement.lang = 'sv';
+                document.body.classList.remove('english');
+                document.body.classList.add('swedish');
+                currentLanguage = 'swedish';
+            }
 
-            const submitBtn = document.getElementById('submit-btn');
-            const loading = document.getElementById('loading');
-            const successMessage = document.getElementById('success-message');
+            console.log('[EventX] Language changed to:', currentLanguage);
+        }
 
-            // Show loading
-            submitBtn.style.display = 'none';
-            loading.classList.add('show');
+        function handleInstallClick() {
+            console.log('[EventX] Install button clicked from main interface');
+            if (window.pwaInstaller) {
+                window.pwaInstaller.handleInstallClick();
+            } else {
+                // Fallback if PWA installer not ready
+                alert(currentLanguage === 'swedish' ? 
+                    'PWA installer laddas... Försök igen om en sekund.' : 
+                    'PWA installer loading... Try again in a second.');
+            }
+        }
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Hide loading, show success
-            loading.classList.remove('show');
-            successMessage.classList.add('show');
-
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                document.getElementById('booking-form').reset();
-                successMessage.classList.remove('show');
-                submitBtn.style.display = 'block';
-                // Clear service selection
-                document.querySelectorAll('.service-card').forEach(card => {
-                    card.classList.remove('selected');
+        function handleShareClick() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'EventX Escape Room Booking',
+                    text: currentLanguage === 'swedish' ? 
+                        'Boka din escape room-upplevelse med EventX!' : 
+                        'Book your escape room experience with EventX!',
+                    url: window.location.href
+                }).then(() => {
+                    console.log('[EventX] Share successful');
+                }).catch(err => {
+                    console.log('[EventX] Share failed:', err);
+                    fallbackShare();
                 });
-                selectedService = null;
-            }, 3000);
-        });
+            } else {
+                fallbackShare();
+            }
+        }
 
-        // Initialize with QuestBox selected
-        selectService('questbox');
+        function fallbackShare() {
+            // Copy URL to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert(currentLanguage === 'swedish' ? 
+                    'Länk kopierad till urklipp!' : 
+                    'Link copied to clipboard!');
+            }).catch(err => {
+                console.log('[EventX] Clipboard failed:', err);
+                // Show URL in prompt as last resort
+                prompt(currentLanguage === 'swedish' ? 
+                    'Kopiera denna länk:' : 
+                    'Copy this link:', window.location.href);
+            });
+        }
 
-        // Prevent zoom on iOS
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault();
-        });
+        function handleBookingSubmit(event) {
+            event.preventDefault();
 
-        // Add to homescreen hint for unsupported browsers
+            // Gather form data
+            const formData = {
+                service: document.getElementById('service-select').value,
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                date: document.getElementById('preferred-date').value,
+                participants: document.getElementById('participants').value,
+                message: document.getElementById('message').value,
+                language: currentLanguage
+            };
+
+            console.log('[EventX] Booking submitted:', formData);
+
+            // Create email subject and body
+            const subject = encodeURIComponent(
+                currentLanguage === 'swedish' ? 
+                `EventX Bokningsförfrågan - ${formData.service}` : 
+                `EventX Booking Request - ${formData.service}`
+            );
+
+            const body = encodeURIComponent(
+                `${currentLanguage === 'swedish' ? 'Hej' : 'Hello'},\n\n` +
+                `${currentLanguage === 'swedish' ? 'Jag vill boka följande:' : 'I would like to book the following:'}\n\n` +
+                `${currentLanguage === 'swedish' ? 'Tjänst:' : 'Service:'} ${formData.service}\n` +
+                `${currentLanguage === 'swedish' ? 'Namn:' : 'Name:'} ${formData.firstName} ${formData.lastName}\n` +
+                `${currentLanguage === 'swedish' ? 'E-post:' : 'Email:'} ${formData.email}\n` +
+                `${currentLanguage === 'swedish' ? 'Telefon:' : 'Phone:'} ${formData.phone}\n` +
+                `${currentLanguage === 'swedish' ? 'Önskat datum:' : 'Preferred date:'} ${formData.date}\n` +
+                `${currentLanguage === 'swedish' ? 'Antal deltagare:' : 'Participants:'} ${formData.participants}\n\n` +
+                `${formData.message ? (currentLanguage === 'swedish' ? 'Meddelande:' : 'Message:') + '\n' + formData.message + '\n\n' : ''}` +
+                `${currentLanguage === 'swedish' ? 'Med vänliga hälsningar' : 'Best regards'},\n${formData.firstName} ${formData.lastName}`
+            );
+
+            // Open email client
+            window.location.href = `mailto:info@eventx.nu?subject=${subject}&body=${body}`;
+
+            // Show success message
+            alert(currentLanguage === 'swedish' ? 
+                '📧 Din e-postapp öppnas nu för att skicka bokningsförfrågan till EventX!' : 
+                '📧 Your email app will now open to send the booking request to EventX!');
+        }
+
+        // Service Worker registration with error handling
         if ('serviceWorker' in navigator) {
-            // Register service worker
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(registration => {
-                    console.log('EventX PWA: Service Worker registered successfully');
-                })
-                .catch(error => {
-                    console.log('EventX PWA: Service Worker registration failed');
-                });
-        }
-
-        // PWA detection
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-            console.log('EventX PWA: Running as installed app');
-            document.body.classList.add('standalone');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => {
+                        console.log('[EventX] SW registered:', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('[EventX] SW registration failed:', registrationError);
+                    });
+            });
         }
     </script>
 </body>
