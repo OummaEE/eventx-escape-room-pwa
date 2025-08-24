@@ -132,10 +132,36 @@
                 navigator.serviceWorker.register('sw.js')
                     .then((registration) => {
                         console.log('SW registered: ', registration);
+                        
+                        // Check for updates every 30 seconds
+                        setInterval(() => {
+                            registration.update();
+                        }, 30000);
+                        
+                        // Listen for new service worker installation
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        // New service worker is available, refresh the page
+                                        console.log('New service worker available, refreshing...');
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
                     })
                     .catch((registrationError) => {
                         console.log('SW registration failed: ', registrationError);
                     });
+                
+                // Listen for service worker controller change
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('Service worker controller changed, refreshing...');
+                    window.location.reload();
+                });
             });
         }
     </script>
