@@ -1,7 +1,5 @@
-const CACHE_NAME = 'eventx-v3.0.0';
+const CACHE_NAME = 'eventx-v3.0.1';
 const urlsToCache = [
-  '/',
-  '/index.html',
   '/app.js',
   '/manifest.json',
   '/components/',
@@ -68,6 +66,16 @@ self.addEventListener('activate', (event) => {
 // Fetch event - always network first for all requests
 self.addEventListener('fetch', (event) => {
   console.log('Fetching:', event.request.url);
+  
+  // Force bypass HTTP cache for navigations
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request, { cache: 'reload' })
+        .then((resp) => resp)
+        .catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
   
   // Always try network first, fallback to cache only if network fails
   event.respondWith(
