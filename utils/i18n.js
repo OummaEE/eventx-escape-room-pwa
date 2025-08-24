@@ -10,6 +10,7 @@ window.I18n = {
       bookings: 'Брони',
       wallet: 'Билеты',
       profile: 'Профиль',
+      photos: 'Фото',
       
       // Home Screen
       appName: 'EventX',
@@ -64,6 +65,14 @@ window.I18n = {
       showQrAtEntrance: 'Покажите этот QR-код на входе',
       close: 'Закрыть',
       
+      // Photos Screen
+      eventPhotos: 'Фото с мероприятий',
+      myEventPhotos: 'Мои фото с мероприятий',
+      noPhotos: 'Нет фотографий',
+      attendEventForPhotos: 'Посетите мероприятие, чтобы получить фото',
+      downloadPhoto: 'Скачать фото',
+      sharePhoto: 'Поделиться',
+      
       // Profile Screen
       personalInfo: 'Личная информация',
       settings: 'Настройки',
@@ -81,12 +90,17 @@ window.I18n = {
       expiryDate: 'ММ/ГГ',
       cvv: 'CVV',
       pay: 'Оплатить',
+      paymentSuccessful: 'Оплата прошла успешно',
+      paymentFailed: 'Ошибка оплаты',
       
       // Notifications
       bookingConfirmed: 'Бронирование подтверждено!',
       ticketReady: 'готов',
       profileSaved: 'Профиль сохранён',
       settingsUpdated: 'Ваши настройки успешно обновлены',
+      eventReminder: 'Напоминание о мероприятии',
+      eventStartsSoon: 'Мероприятие начинается через',
+      minutes: 'минут',
       
       // Common
       somethingWentWrong: 'Что-то пошло не так',
@@ -106,6 +120,7 @@ window.I18n = {
       bookings: 'Bookings',
       wallet: 'Tickets',
       profile: 'Profile',
+      photos: 'Photos',
       
       // Home Screen
       appName: 'EventX',
@@ -160,6 +175,14 @@ window.I18n = {
       showQrAtEntrance: 'Show this QR code at the entrance',
       close: 'Close',
       
+      // Photos Screen
+      eventPhotos: 'Event Photos',
+      myEventPhotos: 'My Event Photos',
+      noPhotos: 'No photos',
+      attendEventForPhotos: 'Attend an event to get photos',
+      downloadPhoto: 'Download photo',
+      sharePhoto: 'Share',
+      
       // Profile Screen
       personalInfo: 'Personal Information',
       settings: 'Settings',
@@ -177,12 +200,17 @@ window.I18n = {
       expiryDate: 'MM/YY',
       cvv: 'CVV',
       pay: 'Pay',
+      paymentSuccessful: 'Payment successful',
+      paymentFailed: 'Payment failed',
       
       // Notifications
       bookingConfirmed: 'Booking confirmed!',
       ticketReady: 'is ready',
       profileSaved: 'Profile saved',
       settingsUpdated: 'Your settings have been updated successfully',
+      eventReminder: 'Event reminder',
+      eventStartsSoon: 'Event starts in',
+      minutes: 'minutes',
       
       // Common
       somethingWentWrong: 'Something went wrong',
@@ -202,6 +230,7 @@ window.I18n = {
       bookings: 'Bokningar',
       wallet: 'Biljetter',
       profile: 'Profil',
+      photos: 'Foton',
       
       // Home Screen
       appName: 'EventX',
@@ -256,6 +285,14 @@ window.I18n = {
       showQrAtEntrance: 'Visa denna QR-kod vid entrén',
       close: 'Stäng',
       
+      // Photos Screen
+      eventPhotos: 'Evenemangsfoton',
+      myEventPhotos: 'Mina evenemangsfoton',
+      noPhotos: 'Inga foton',
+      attendEventForPhotos: 'Delta i ett evenemang för att få foton',
+      downloadPhoto: 'Ladda ner foto',
+      sharePhoto: 'Dela',
+      
       // Profile Screen
       personalInfo: 'Personlig information',
       settings: 'Inställningar',
@@ -273,12 +310,17 @@ window.I18n = {
       expiryDate: 'MM/ÅÅ',
       cvv: 'CVV',
       pay: 'Betala',
+      paymentSuccessful: 'Betalning lyckades',
+      paymentFailed: 'Betalning misslyckades',
       
       // Notifications
       bookingConfirmed: 'Bokning bekräftad!',
       ticketReady: 'är klar',
       profileSaved: 'Profil sparad',
       settingsUpdated: 'Dina inställningar har uppdaterats',
+      eventReminder: 'Evenemangspåminnelse',
+      eventStartsSoon: 'Evenemanget börjar om',
+      minutes: 'minuter',
       
       // Common
       somethingWentWrong: 'Något gick fel',

@@ -1,37 +1,52 @@
 function BottomNavigation({ currentScreen, onScreenChange }) {
-  const [language, setLanguage] = React.useState(I18n.currentLanguage);
-  
-  React.useEffect(() => {
-    const handleLanguageChange = () => setLanguage(I18n.currentLanguage);
-    window.addEventListener('languageChanged', handleLanguageChange);
-    return () => window.removeEventListener('languageChanged', handleLanguageChange);
-  }, []);
+  const navItems = [
+    { id: 'home', icon: 'icon-home', label: window.I18n.t('home') },
+    { id: 'events', icon: 'icon-calendar', label: window.I18n.t('events') },
+    { id: 'bookings', icon: 'icon-bookmark', label: window.I18n.t('bookings') },
+    { id: 'wallet', icon: 'icon-credit-card', label: window.I18n.t('wallet') },
+    { id: 'photos', icon: 'icon-camera', label: window.I18n.t('photos') },
+    { id: 'profile', icon: 'icon-user', label: window.I18n.t('profile') }
+  ];
 
-  try {
-    const navItems = [
-      { id: 'home', icon: 'home', label: I18n.t('home') },
-      { id: 'events', icon: 'calendar', label: I18n.t('events') },
-      { id: 'bookings', icon: 'bookmark', label: I18n.t('bookings') },
-      { id: 'wallet', icon: 'wallet', label: I18n.t('wallet') },
-      { id: 'profile', icon: 'user', label: I18n.t('profile') }
-    ];
-
-    return (
-      <nav className="bottom-nav" data-name="bottom-navigation" data-file="components/BottomNavigation.js">
-        {navItems.map((item) => (
+  return (
+    <div className="bottom-nav bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-2xl">
+      <div className="flex items-center justify-around px-2 py-1">
+        {navItems.map(item => (
           <button
             key={item.id}
-            className={`nav-item ${currentScreen === item.id ? 'active' : ''}`}
             onClick={() => onScreenChange(item.id)}
+            className={`nav-item relative ${
+              currentScreen === item.id ? 'active' : ''
+            }`}
           >
-            <div className={`icon-${item.icon} text-xl`}></div>
-            <span className="text-xs font-medium">{item.label}</span>
+            {/* Active indicator */}
+            {currentScreen === item.id && (
+              <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-indigo-600 rounded-full"></div>
+            )}
+            
+            {/* Icon with modern styling */}
+            <div className={`${item.icon} text-xl mb-1 transition-all duration-300 ${
+              currentScreen === item.id 
+                ? 'text-indigo-600 scale-110' 
+                : 'text-gray-500 hover:text-indigo-500'
+            }`}></div>
+            
+            {/* Label with better typography */}
+            <span className={`text-xs font-medium transition-all duration-300 ${
+              currentScreen === item.id 
+                ? 'text-indigo-600 font-semibold' 
+                : 'text-gray-500'
+            }`}>
+              {item.label}
+            </span>
+            
+            {/* Subtle background for active state */}
+            {currentScreen === item.id && (
+              <div className="absolute inset-0 bg-indigo-50 rounded-xl -z-10 scale-110"></div>
+            )}
           </button>
         ))}
-      </nav>
-    );
-  } catch (error) {
-    console.error('BottomNavigation component error:', error);
-    return null;
-  }
+      </div>
+    </div>
+  );
 }

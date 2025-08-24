@@ -51,6 +51,18 @@ function App() {
     const savedTickets = StorageManager.getTickets();
     setBookings(savedBookings);
     setTickets(savedTickets);
+
+    // Listen for navigation events
+    const handleNavigateToEvents = () => setCurrentScreen('events');
+    const handleNavigateToWallet = () => setCurrentScreen('wallet');
+    
+    window.addEventListener('navigateToEvents', handleNavigateToEvents);
+    window.addEventListener('navigateToWallet', handleNavigateToWallet);
+
+    return () => {
+      window.removeEventListener('navigateToEvents', handleNavigateToEvents);
+      window.removeEventListener('navigateToWallet', handleNavigateToWallet);
+    };
   }, []);
 
   const addBooking = (booking) => {
@@ -58,9 +70,10 @@ function App() {
     setBookings(newBookings);
     StorageManager.saveBooking(booking);
     
-    // Schedule notification
+    // Schedule notification and show confirmation
     if (window.NotificationManager) {
-      window.NotificationManager.scheduleReminder(booking);
+      window.NotificationManager.scheduleEventReminder(booking);
+      window.NotificationManager.showBookingConfirmation(booking);
     }
   };
 
@@ -68,6 +81,11 @@ function App() {
     const newTickets = [...tickets, ticket];
     setTickets(newTickets);
     StorageManager.saveTicket(ticket);
+
+    // Show payment success notification
+    if (window.NotificationManager) {
+      window.NotificationManager.showPaymentSuccess(ticket);
+    }
   };
 
   const renderScreen = () => {
@@ -80,6 +98,8 @@ function App() {
         return <BookingsScreen bookings={bookings} />;
       case 'wallet':
         return <WalletScreen tickets={tickets} />;
+      case 'photos':
+        return <PhotosScreen />;
       case 'profile':
         return <ProfileScreen />;
       default:
@@ -89,7 +109,7 @@ function App() {
 
   try {
     return (
-      <div className="min-h-screen pb-20" data-name="app" data-file="app.js">
+      <div className="min-h-screen pb-20 bg-gradient-to-br from-slate-50 to-blue-50" data-name="app" data-file="app.js">
         <div className="fade-in">
           {renderScreen()}
         </div>
